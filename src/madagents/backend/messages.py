@@ -106,7 +106,15 @@ def get_exec_trace_messages(agent: str, message: BaseMessage):
         exist_fct_call = False
         apply_patch_trace = None
 
-        for content in message.content:
+        # With OpenAI/Ollama the content is a plain string, not a list of
+        # content-block dicts.  Normalise to a list so the rest of the loop
+        # works unchanged.
+        raw_content = message.content
+        if isinstance(raw_content, str):
+            raw_content = [{"type": "text", "text": raw_content}] if raw_content else []
+        for content in raw_content:
+            if not isinstance(content, dict):
+                continue
             if content["type"] == "reasoning":
                 pass
             elif content["type"] == "text":
