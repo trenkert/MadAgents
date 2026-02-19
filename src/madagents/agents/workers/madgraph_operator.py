@@ -245,7 +245,7 @@ class MadGraphOperator(BaseWorker):
     def __init__(
         self,
         session: CLISession,
-        model: str="gpt-5",
+        model: str="glm-5:cloud",
         reasoning_effort: str="high",
         verbosity: str="low",
         step_limit: Optional[int] = 200,

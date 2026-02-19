@@ -29,11 +29,7 @@ export const darkTheme = {
 };
 
 export const SUPPORTED_MODELS = [
-  "gpt-5-nano",
-  "gpt-5-mini",
-  "gpt-5",
-  "gpt-5.1",
-  "gpt-5.2",
+  "glm-5:cloud",
 ];
 
 export const VERBOSITY_LEVELS = ["low", "medium", "high"];

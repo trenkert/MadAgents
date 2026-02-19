@@ -191,7 +191,7 @@ class PDFReader(BaseWorker):
     """Worker specialized in reading and summarizing PDF files."""
     def __init__(
         self,
-        model: str="gpt-5",
+        model: str="glm-5:cloud",
         reasoning_effort: str="high",
         verbosity: str="low",
         step_limit: Optional[int] = 200,

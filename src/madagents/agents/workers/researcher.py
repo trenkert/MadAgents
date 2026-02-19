@@ -133,7 +133,7 @@ class Researcher(BaseWorker):
     """Worker specialized in web research and synthesis."""
     def __init__(
         self,
-        model: str="gpt-5",
+        model: str="glm-5:cloud",
         reasoning_effort: str="high",
         verbosity: str="low",
         step_limit: Optional[int] = 200,
