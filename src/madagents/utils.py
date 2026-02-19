@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Dict
 
+from langchain_core.exceptions import OutputParserException
 from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, ToolMessage
 from langgraph.graph.message import add_messages as _add_messages
 from pydantic import ValidationError
@@ -23,9 +24,18 @@ def invoke_with_validation_retry(llm, messages, *, reasoning=None, max_retries: 
     for attempt in range(max_retries + 1):
         try:
             if reasoning is None:
-                return llm.invoke(messages)
-            return llm.invoke(messages, reasoning=reasoning)
-        except ValidationError as exc:
+                result = llm.invoke(messages)
+            else:
+                result = llm.invoke(messages, reasoning=reasoning)
+            # When include_raw=True, parsing failures are stored in result["parsing_error"]
+            # and result["parsed"] is set to None instead of raising. Surface the error
+            # so the retry logic can handle it.
+            if isinstance(result, dict) and result.get("parsed") is None:
+                exc = result.get("parsing_error")
+                if exc is not None:
+                    raise exc
+            return result
+        except (ValidationError, OutputParserException) as exc:
             last_exc = exc
             if attempt >= max_retries:
                 raise
