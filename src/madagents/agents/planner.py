@@ -22,7 +22,7 @@ from madagents.agents.workers.script_operator import SCRIPT_OPERATOR_DESC
 from madagents.agents.workers.pdf_reader import PDF_READER_DESC
 from madagents.agents.workers.researcher import RESEARCHER_DESC
 from madagents.agents.workers.plotter import PLOTTER_DESC
-from madagents.utils import invoke_with_validation_retry
+from madagents.utils import invoke_with_validation_retry, build_json_schema_prompt
 
 #########################################################################
 ## DESCRIPTION ##########################################################
@@ -489,6 +489,8 @@ def get_planner_node(llm: BaseChatModel, tools: list) -> Callable[[PlannerState]
 <previous_conversation_summary>
 {prev_msgs_summary}
 </previous_conversation_summary>"""
+
+        _developer_prompt = _developer_prompt + "\n\n" + build_json_schema_prompt(Plan)
 
         messages = [
             SystemMessage(content=PLANNER_SYSTEM_PROMPT),

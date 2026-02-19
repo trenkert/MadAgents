@@ -7,7 +7,7 @@ from dataclasses import asdict, is_dataclass
 
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Type
 
 from langchain_core.exceptions import OutputParserException
 from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, ToolMessage
@@ -56,6 +56,23 @@ def inject_optional_prompt_lines(prompt: str, marker: str, lines: str) -> str:
     if not inserted:
         return prompt.replace(marker, replacement)
     return "\n".join(out_lines)
+
+def build_json_schema_prompt(model: Type) -> str:
+    """Return a prompt snippet telling the model what JSON schema to output.
+
+    Required when using ``method="json_mode"`` with ``with_structured_output``,
+    because LangChain does not automatically inject the schema into the prompt
+    in that mode — it only sets ``response_format={"type": "json_object"}``.
+    """
+    schema = json.dumps(model.model_json_schema(), indent=2)
+    return (
+        "<output_format>\n"
+        "Respond ONLY with a valid JSON object. "
+        "Do NOT include any prose, markdown, or text outside the JSON object.\n"
+        "The JSON object must conform exactly to this JSON schema:\n"
+        f"{schema}\n"
+        "</output_format>"
+    )
 
 def float_env(name: str, default: float) -> float:
     """Parse a float from the environment, gracefully falling back to default."""

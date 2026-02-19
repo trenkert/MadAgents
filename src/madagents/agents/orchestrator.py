@@ -18,7 +18,7 @@ from madagents.agents.workers.researcher import RESEARCHER_DESC
 from madagents.agents.workers.plotter import PLOTTER_DESC
 from madagents.agents.planner import PLANNER_DESC, PLAN_UPDATER_DESC
 from madagents.agents.reviewer import REVIEWER_DESC
-from madagents.utils import invoke_with_validation_retry, inject_optional_prompt_lines
+from madagents.utils import invoke_with_validation_retry, inject_optional_prompt_lines, build_json_schema_prompt
 
 #########################################################################
 ## Orchestrator decision ################################################
@@ -397,7 +397,7 @@ def get_orchestrator_node(
             ORCHESTRATOR_SYSTEM_MADGRAPH_EVIDENCE_PROMPT if require_madgraph_evidence else "",
         )
         _developer_prompt = ORCHESTRATOR_DEVELOPER_PROMPT
-        
+
         prev_msgs_summary = state.get("prev_msg_summary", None)
         if prev_msgs_summary is not None and prev_msgs_summary.strip() != "":
             # Inject prior summary to keep the prompt compact.
@@ -406,6 +406,8 @@ def get_orchestrator_node(
 <previous_conversation_summary>
 {prev_msgs_summary}
 </previous_conversation_summary>"""
+
+        _developer_prompt = _developer_prompt + "\n\n" + build_json_schema_prompt(OrchestratorDecision)
 
         messages = [
             SystemMessage(content=_system_prompt),

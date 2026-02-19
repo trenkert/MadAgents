@@ -31,7 +31,7 @@ from madagents.agents.workers.pdf_reader import PDFReader
 from madagents.agents.workers.madgraph_operator import MadGraphOperator
 from madagents.agents.workers.user_cli_operator import UserCLIOperator
 from madagents.agents.workers.plotter import Plotter
-from madagents.utils import invoke_with_validation_retry
+from madagents.utils import invoke_with_validation_retry, build_json_schema_prompt
 
 from madagents.agents.summarizer import Summarizer
 
@@ -200,7 +200,7 @@ def get_plan_updater_node(plan_updater_llm: BaseChatModel) -> Callable[[MadAgent
 
         messages = [
             SystemMessage(content=PLAN_UPDATER_SYSTEM_PROMPT),
-            SystemMessage(content=get_plan_updater_developer_prompt(state["plan"])),
+            SystemMessage(content=get_plan_updater_developer_prompt(state["plan"]) + "\n\n" + build_json_schema_prompt(PlanUpdate)),
             HumanMessage(content=orchestrator_decision["message"])
         ]
 
