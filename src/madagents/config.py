@@ -5,11 +5,6 @@ from typing import Optional, Dict, List
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 SUPPORTED_MODELS: List[str] = [
-    "gpt-5-nano",
-    "gpt-5-mini",
-    "gpt-5",
-    "gpt-5.1",
-    "gpt-5.2",
     "glm-5:cloud",
 ]
 
@@ -202,7 +197,10 @@ def coerce_config(payload: Optional[dict]) -> MadAgentsConfig:
                 "min_tail_tokens",
             ):
                 if key in agent_payload:
-                    data["agents"][name][key] = agent_payload.get(key)
+                    value = agent_payload.get(key)
+                    if key == "model" and value not in SUPPORTED_MODELS:
+                        continue  # Skip unsupported model names; keep the default.
+                    data["agents"][name][key] = value
             if not data["agents"][name].get("supports_step_limit"):
                 # Ensure step_limit is cleared for unsupported agents.
                 data["agents"][name]["step_limit"] = None
