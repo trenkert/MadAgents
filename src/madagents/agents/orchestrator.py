@@ -451,7 +451,7 @@ class Orchestrator:
         )
 
         # Structured output ensures the response matches OrchestratorDecision.
-        self.orchestrator_llm = self.llm.with_structured_output(OrchestratorDecision, include_raw=True)
+        self.orchestrator_llm = self.llm.with_structured_output(OrchestratorDecision, include_raw=True, method="json_mode")
 
         graph = StateGraph(OrchestratorState)
 

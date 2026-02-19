@@ -195,6 +195,7 @@ def get_plan_updater_node(plan_updater_llm: BaseChatModel) -> Callable[[MadAgent
         structured_plan_updater = plan_updater_llm.with_structured_output(
             PlanUpdate,
             include_raw=True,
+            method="json_mode",
         )
 
         messages = [

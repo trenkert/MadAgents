@@ -477,6 +477,7 @@ def get_planner_node(llm: BaseChatModel, tools: list) -> Callable[[PlannerState]
         _llm = llm.with_structured_output(
             Plan,
             include_raw=True,
+            method="json_mode",
         )
 
         _developer_prompt = PLANNER_DEVELOPER_PROMPT
