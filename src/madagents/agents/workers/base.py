@@ -133,10 +133,15 @@ class BaseWorker:
             max_tokens=1_000_000
         )
 
+        # Dict-typed entries (e.g. {"type": "web_search"}) are Anthropic built-in
+        # tools that are not supported by the Ollama/OpenAI-compatible endpoint.
+        # Passing them to bind_tools triggers the Responses API (/v1/responses)
+        # which Ollama does not implement, causing a 404.  Filter them out for
+        # both bind_tools and ToolNode.
         _tools_for_node = [tool for tool in self.tools if not isinstance(tool, dict)]
 
         # Bind tools to the LLM.
-        self.llm_with_tools = self.llm.bind_tools(self.tools)
+        self.llm_with_tools = self.llm.bind_tools(_tools_for_node)
         
         graph = StateGraph(self.state_class)
 
