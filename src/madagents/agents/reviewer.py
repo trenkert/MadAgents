@@ -437,7 +437,8 @@ class Reviewer:
             model=model,
             base_url='http://localhost:18080/v1',
             api_key='no-key',
-            max_tokens=1_000_000
+            max_tokens=1_000_000,
+            model_kwargs={"enable_thinking": False},
         )
 
         self.tools = [bash_tool, wait_tool, apply_patch_tool, read_pdf_tool, read_image_tool, web_search_tool]

@@ -72,7 +72,8 @@ class Summarizer:
             model=model,
             base_url='http://localhost:18080/v1',
             api_key='no-key',
-            max_tokens=max_tokens
+            max_tokens=max_tokens,
+            model_kwargs={"enable_thinking": False},
         )
 
     def _summarize(self, prev_summary: str | None, messages: list[BaseMessage]) -> str:

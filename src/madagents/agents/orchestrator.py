@@ -449,7 +449,8 @@ class Orchestrator:
             model=model,
             base_url='http://localhost:18080/v1',
             api_key='no-key',
-            max_tokens=1_000_000
+            max_tokens=1_000_000,
+            model_kwargs={"enable_thinking": False},
         )
 
         # Structured output ensures the response matches OrchestratorDecision.
