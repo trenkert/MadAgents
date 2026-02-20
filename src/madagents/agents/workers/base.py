@@ -14,7 +14,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 
 if TYPE_CHECKING:
     from madagents.agents.summarizer import Summarizer
-from madagents.utils import annotate_output_token_counts
+from madagents.utils import annotate_output_token_counts, ensure_human_message_last
 
 #########################################################################
 ## State ################################################################
@@ -80,11 +80,11 @@ def get_worker_node(
 {prev_msgs_summary}
 </previous_conversation_summary>"""
 
-        messages = [
+        messages = ensure_human_message_last([
             SystemMessage(content=system_prompt),
             SystemMessage(content=_developer_prompt),
             *context_msgs,
-        ]
+        ])
         response = _llm.invoke(messages)
         response.name = name
         # Persist token counts for downstream accounting.

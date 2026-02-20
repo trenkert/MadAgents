@@ -6,7 +6,7 @@ from typing import Annotated, Callable
 
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import SystemMessage, BaseMessage
+from langchain_core.messages import SystemMessage, BaseMessage, AIMessage
 from langgraph.graph.message import add_messages
 
 from madagents.agents.workers.user_cli_operator import USER_CLI_OPERATOR_DESC
@@ -25,7 +25,7 @@ from madagents.tools import (
   web_search_tool, WEB_SEARCH_DESC
 )
 from madagents.agents.summarizer import Summarizer
-from madagents.utils import annotate_output_token_counts, inject_optional_prompt_lines
+from madagents.utils import annotate_output_token_counts, inject_optional_prompt_lines, ensure_human_message_last
 
 from langgraph.graph import StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
@@ -379,11 +379,11 @@ def get_reviewer_node(
         else:
             combined = combined[non_summary_start:]
 
-        messages = [
+        messages = ensure_human_message_last([
             SystemMessage(content=_system_prompt),
             SystemMessage(content=_developer_prompt),
             *combined,
-        ]
+        ])
         response = _llm.invoke(messages)
         response.name = "reviewer"
         # Persist token counts for downstream accounting.

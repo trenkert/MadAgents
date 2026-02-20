@@ -18,6 +18,20 @@ from pydantic import ValidationError
 ## LLM helpers ##########################################################
 #########################################################################
 
+def ensure_human_message_last(messages: list, continuation: str = "Please continue.") -> list:
+    """Append a HumanMessage when the last message is an AIMessage.
+
+    GLM-4.6's Jinja2 chat template raises an error when ``enable_thinking``
+    is present in the request (even as ``False``) and the last message has the
+    assistant role, because it interprets that as an "assistant response
+    prefill".  This helper guards every LLM call site by ensuring the message
+    list always ends with a user-role message.
+    """
+    if messages and isinstance(messages[-1], AIMessage):
+        return [*messages, HumanMessage(content=continuation)]
+    return messages
+
+
 def invoke_with_validation_retry(llm, messages, *, reasoning=None, max_retries: int = 2):
     """Invoke an LLM and retry when structured output validation fails."""
     last_exc = None

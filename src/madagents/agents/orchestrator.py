@@ -18,7 +18,7 @@ from madagents.agents.workers.researcher import RESEARCHER_DESC
 from madagents.agents.workers.plotter import PLOTTER_DESC
 from madagents.agents.planner import PLANNER_DESC, PLAN_UPDATER_DESC
 from madagents.agents.reviewer import REVIEWER_DESC
-from madagents.utils import invoke_with_validation_retry, inject_optional_prompt_lines, build_json_schema_prompt
+from madagents.utils import invoke_with_validation_retry, inject_optional_prompt_lines, build_json_schema_prompt, ensure_human_message_last
 
 #########################################################################
 ## Orchestrator decision ################################################
@@ -409,12 +409,12 @@ def get_orchestrator_node(
 
         _developer_prompt = _developer_prompt + "\n\n" + build_json_schema_prompt(OrchestratorDecision)
 
-        messages = [
+        messages = ensure_human_message_last([
             SystemMessage(content=_system_prompt),
             SystemMessage(content=_developer_prompt),
             *state["prev_msgs"],
             *state["messages"],
-        ]
+        ])
         response = invoke_with_validation_retry(
             llm,
             messages,

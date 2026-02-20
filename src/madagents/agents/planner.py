@@ -9,7 +9,7 @@ from typing import Annotated, Callable
 
 from langchain_openai import ChatOpenAI
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import SystemMessage, BaseMessage, AIMessage
+from langchain_core.messages import HumanMessage, SystemMessage, BaseMessage, AIMessage
 from langgraph.graph.message import add_messages
 
 from langgraph.graph import StateGraph, END
@@ -22,7 +22,7 @@ from madagents.agents.workers.script_operator import SCRIPT_OPERATOR_DESC
 from madagents.agents.workers.pdf_reader import PDF_READER_DESC
 from madagents.agents.workers.researcher import RESEARCHER_DESC
 from madagents.agents.workers.plotter import PLOTTER_DESC
-from madagents.utils import invoke_with_validation_retry, build_json_schema_prompt
+from madagents.utils import invoke_with_validation_retry, build_json_schema_prompt, ensure_human_message_last
 
 #########################################################################
 ## DESCRIPTION ##########################################################
@@ -492,12 +492,12 @@ def get_planner_node(llm: BaseChatModel, tools: list) -> Callable[[PlannerState]
 
         _developer_prompt = _developer_prompt + "\n\n" + build_json_schema_prompt(Plan)
 
-        messages = [
+        messages = ensure_human_message_last([
             SystemMessage(content=PLANNER_SYSTEM_PROMPT),
             SystemMessage(content=_developer_prompt),
             *state["prev_msgs"],
             *state["messages"],
-        ]
+        ])
         response = invoke_with_validation_retry(
             _llm,
             messages,
