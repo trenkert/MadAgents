@@ -29,7 +29,7 @@ export const darkTheme = {
 };
 
 export const SUPPORTED_MODELS = [
-  "glm-5:cloud",
+  "unsloth/GLM-4.6-GGUF:Q4_K_XL",
 ];
 
 export const VERBOSITY_LEVELS = ["low", "medium", "high"];
