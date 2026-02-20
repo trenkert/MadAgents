@@ -439,7 +439,7 @@ class Orchestrator:
     """Wrap an orchestrator LLM and expose a minimal state graph."""
     def __init__(
         self,
-        model: str="glm-5:cloud",
+        model: str="unsloth/GLM-4.6-GGUF:Q4_K_XL",
         reasoning_effort: str="high",
         verbosity: str="low",
         require_madgraph_evidence: bool = False,
@@ -447,8 +447,8 @@ class Orchestrator:
         """Initialize the orchestrator model and compile its graph."""
         self.llm = ChatOpenAI(
             model=model,
-            base_url='http://localhost:11434/v1',
-            api_key='ollama',
+            base_url='http://localhost:18080/v1',
+            api_key='no-key',
             max_tokens=1_000_000
         )
 

@@ -475,8 +475,8 @@ class MadAgents:
         plan_updater_cfg = config.agents["plan_updater"]
         self.plan_updater_llm = ChatOpenAI(
             model=plan_updater_cfg.model,
-            base_url='http://localhost:11434/v1',
-            api_key='ollama',
+            base_url='http://localhost:18080/v1',
+            api_key='no-key',
             max_tokens=50_000
         )
         summarizer_cfg = config.agents["summarizer"]

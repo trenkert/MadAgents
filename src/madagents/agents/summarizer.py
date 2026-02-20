@@ -56,7 +56,7 @@ class Summarizer:
     """Summarize conversation history to stay within token limits."""
     def __init__(
         self,
-        model: str="glm-5:cloud",
+        model: str="unsloth/GLM-4.6-GGUF:Q4_K_XL",
         reasoning_effort: str="low",
         verbosity: str="low",
         max_tokens: int = 1_000_000,
@@ -70,8 +70,8 @@ class Summarizer:
         self.min_tail_tokens = min_tail_tokens
         self.llm = ChatOpenAI(
             model=model,
-            base_url='http://localhost:11434/v1',
-            api_key='ollama',
+            base_url='http://localhost:18080/v1',
+            api_key='no-key',
             max_tokens=max_tokens
         )
 

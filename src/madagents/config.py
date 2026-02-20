@@ -5,7 +5,7 @@ from typing import Optional, Dict, List
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 SUPPORTED_MODELS: List[str] = [
-    "glm-5:cloud",
+    "unsloth/GLM-4.6-GGUF:Q4_K_XL",
 ]
 
 VERBOSITY_LEVELS: List[str] = ["low", "medium", "high"]
@@ -34,7 +34,7 @@ AGENT_ORDER: List[str] = [
 
 
 class AgentConfig(BaseModel):
-    model: str = Field(default="glm-5:cloud")
+    model: str = Field(default="unsloth/GLM-4.6-GGUF:Q4_K_XL")
     verbosity: str = Field(default="low")
     reasoning_effort: Optional[str] = Field(default=None)
     token_threshold: Optional[int] = Field(default=None)
@@ -117,7 +117,7 @@ def _default_agents() -> Dict[str, AgentConfig]:
         "orchestrator": AgentConfig(step_limit=None, supports_step_limit=False),
         "planner": AgentConfig(step_limit=None, supports_step_limit=False),
         "plan_updater": AgentConfig(
-            model="glm-5:cloud",
+            model="unsloth/GLM-4.6-GGUF:Q4_K_XL",
             verbosity="low",
             step_limit=None,
             supports_step_limit=False,

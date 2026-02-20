@@ -224,7 +224,7 @@ class Plotter(BaseWorker):
     """Worker specialized in plot generation and script-based plotting."""
     def __init__(
         self,
-        model: str="glm-5:cloud",
+        model: str="unsloth/GLM-4.6-GGUF:Q4_K_XL",
         reasoning_effort: str="high",
         verbosity: str="low",
         step_limit: Optional[int] = 200,
