@@ -131,7 +131,7 @@ class BaseWorker:
             base_url='http://localhost:18080/v1',
             api_key='no-key',
             max_tokens=1_000_000,
-            model_kwargs={"enable_thinking": False},
+            extra_body={"enable_thinking": False},
         )
 
         # Dict-typed entries (e.g. {"type": "web_search"}) are Anthropic built-in

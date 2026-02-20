@@ -478,7 +478,7 @@ class MadAgents:
             base_url='http://localhost:18080/v1',
             api_key='no-key',
             max_tokens=50_000,
-            model_kwargs={"enable_thinking": False},
+            extra_body={"enable_thinking": False},
         )
         summarizer_cfg = config.agents["summarizer"]
         summarizer_effort = (
